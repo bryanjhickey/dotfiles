@@ -1,0 +1,24 @@
+show_icon: false
+matches:
+  - trigger: "ddate"
+    replace: "[[{{mydate}}]]"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - trigger: "ttime"
+    replace: "{{t}} - "
+    vars:
+      - name: t
+        type: date
+        params:
+            format: "%H:%M"
+  - trigger: "eemail"
+    replace: "bryanjhickey@gmail.com"
+  - trigger: "aabn"
+    replace: "91 919 028 572"
+  - trigger: "aadress"
+    replace: "10 Bellara Crescent, Kealba, VIC 3021"
+
