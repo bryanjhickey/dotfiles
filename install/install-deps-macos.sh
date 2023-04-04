@@ -6,7 +6,7 @@ brew install --cask istat-menus
 brew install --cask slack
 brew install --cask raycast
 brew install youtube-dl
-
+brew install pnpm
 brew install exa
 brew install z
 
