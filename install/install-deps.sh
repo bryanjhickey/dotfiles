@@ -1,18 +1,21 @@
 #!/bin/zsh
 
-#if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-#    source ./install-deps-linux.sh
-#elif [[ "$OSTYPE" == "darwin"* ]]; then
-#    source ./install-deps-macos.sh
-#fi
+# Install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.3
+# Install Powerline fonts
+# Remove existing installation
+rm -rf $HOME/powerline-fonts
+# clone
+git clone https://github.com/powerline/fonts.git --depth=1 $HOME/powerline-fonts
+# install
+cd $HOME/powerline-fonts
+./install.sh
+# clean-up a bitss
+cd ..
+rm -rf $HOME/powerline-fonts
 
-source $HOME/.asdf/asdf.sh
-
-asdf plugin add nodejs
-NODEJS_CHECK_SIGNATURES=no asdf install nodejs 18.15.0
-asdf global nodejs $(asdf list nodejs | tail -1 | sed 's/^ *//g')
-
-npm install -g git-branch-utils
-
+# Install Oh My Zsh
+# Remove existing installation
+rm -rf $HOME/.oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

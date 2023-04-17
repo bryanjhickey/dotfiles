@@ -1,9 +1,7 @@
-brew tap federico-terzi/espanso
-brew install zsh-syntax-highlighting
 brew install pnpm
-brew install exa
 brew install z
-brew install casks
+brew install zsh
+brew install cask
 
 brew install --cask google-chrome
 brew install --cask 1password

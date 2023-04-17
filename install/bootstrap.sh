@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 #
 # bootstrap installs things.
-# copied from https://github.com/andrew8088
-#
 
 cd "$(dirname "$0")/.."
 DOTFILES=$(pwd -P)
@@ -70,7 +68,7 @@ link_file () {
           s )
             skip=true;;
           S )
-            skip_all=false;;
+            skip_all=true;;
           * )
             ;;
         esac
@@ -119,7 +117,7 @@ prop () {
 install_dotfiles () {
   info 'installing dotfiles'
 
-  local overwrite_all=true backup_all=false skip_all=false
+  local overwrite_all=false backup_all=false skip_all=false
 
   find -H "$DOTFILES" -maxdepth 2 -name 'links.prop' -not -path '*.git*' | while read linkfile
   do
