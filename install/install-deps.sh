@@ -3,6 +3,15 @@
 # Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+# Install ASDF dependencies
+brew install coreutils curl git
+# Install ASDF
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.3
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+asdf install nodejs latest
+asdf global nodejs latest
+
+
 # Install Powerline fonts
 # Remove existing installation
 rm -rf $HOME/powerline-fonts
