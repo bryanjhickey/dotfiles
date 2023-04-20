@@ -14,6 +14,7 @@ brew install --cask raycast
 brew install --cask firefox
 brew install --cask istat-menus
 brew install --cask slack
+brew install --cask figma
 brew install --cask superduper
 brew install --cask whatsapp
 brew install --cask sublime-text
