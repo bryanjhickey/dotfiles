@@ -9,9 +9,9 @@ ZSH_THEME="cobalt2"
 
 
 source_if_exists $HOME/.env.sh
-source_if_exists $DOTFILES/zsh/history.zsh
-source_if_exists $DOTFILES/zsh/git.zsh
-source_if_exists $DOTFILES/zsh/aliases.zsh
+source_if_exists ~/Code/dotfiles/zsh/history.zsh
+source_if_exists ~/Code/dotfiles/zsh/git.zsh
+source_if_exists ~/Code/dotfiles/zsh/aliases.zsh
 source_if_exists /usr/local/etc/profile.d/z.sh
 source_if_exists /opt/homebrew/etc/profile.d/z.sh
 
@@ -45,6 +45,7 @@ plugins=(
   history
   sudo
   vscode
+  asdf
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -58,3 +59,13 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# bun completions
+[ -s "/Users/bjh/.bun/_bun" ] && source "/Users/bjh/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:$PATH"

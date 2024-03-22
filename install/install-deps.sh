@@ -4,13 +4,11 @@
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Install ASDF dependencies
-brew install coreutils curl git
-# Install ASDF
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.3
+brew install coreutils curl git asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf install nodejs latest
 asdf global nodejs latest
-
 
 # Install Powerline fonts
 # Remove existing installation
@@ -23,6 +21,8 @@ cd $HOME/powerline-fonts
 # clean-up a bitss
 cd ..
 rm -rf $HOME/powerline-fonts
+
+pnpm i -g vercel turbo
 
 # Install Oh My Zsh
 # Remove existing installation

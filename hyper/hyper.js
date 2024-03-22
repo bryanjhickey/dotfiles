@@ -4,11 +4,14 @@
 // See https://hyper.is//cfg for all currently supported options.
 module.exports = {
     config: {
+      updateChannel: 'canary',
       // omit or set true to show. set false to remove it
       wickedBorder: true,
       // change the colour here
       wickedBorderColor: '#ffc600',
-      shell: '/usr/local/bin/zsh',
+      shell: '/bin/zsh',
+      // Powerline fonts:
+      fontFamily: '"Operator Mono", "Inconsolata for Powerline", monospace'
     },
     plugins: [
       'hyperterm-cobalt2-theme'

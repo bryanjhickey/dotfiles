@@ -17,7 +17,6 @@ brew install --cask slack
 brew install --cask figma
 brew install --cask superduper
 brew install --cask whatsapp
-brew install --cask sublime-text
 brew install --cask spotify
 brew install --cask discord
 brew install --cask cleanmymac
