@@ -4,7 +4,7 @@ My personal macOS setup — the shell I live in, the terminal I look at, the key
 
 See [`CHANGELOG.md`](CHANGELOG.md) for what's changed lately.
 
-## Quick start
+## 🚀 Quick start
 
 ```bash
 git clone https://github.com/bryanjhickey/dotfiles.git ~/code/dotfiles
@@ -16,9 +16,9 @@ cd ~/code/dotfiles
 
 A few apps need permission grants Stow can't issue (kernel driver for Karabiner, Accessibility for Hammerspoon, etc.) — see [First-time setup on a fresh Mac](#first-time-setup-on-a-fresh-mac) below.
 
-## The setup, briefly
+## 🧭 The setup, briefly
 
-### Shell I live in
+### 🐚 Shell I live in
 
 [zsh](https://www.zsh.org/) configured the [XDG-compliant way](https://wiki.archlinux.org/title/XDG_Base_Directory) — only `~/.zshenv` lives at `$HOME`; everything else is under `~/.config/zsh/`. The shell does most of my non-coding work too (file navigation, scratch arithmetic, ad-hoc data wrangling), so it's worth investing in.
 
@@ -35,20 +35,20 @@ The pieces I'd be lost without:
 
 There's also a small daily-Homebrew-maintenance block in `.zshrc` that runs `brew update && brew upgrade && brew cleanup` in the background, gated by a once-per-day stamp file. Saves the "wait, when did I last update brew" stutter.
 
-### The terminal itself
+### 🖥 The terminal itself
 
 [**iTerm2**](https://iterm2.com/) — actively maintained, native (not Electron), and forgiving of plugin experiments. I tried Hyper for a while and bailed when its canary 4.x channel rolled back to 3.4.1 mid-debug; the upstream repo hadn't seen a meaningful commit in close to two years.
 
 The dotfiles ship two **Monokai Pro** colour presets (the standard one and the Octagon variant) plus the **MesloLGS Nerd Font** cask, which gives `eza` and Powerlevel10k their icon glyphs. iTerm2 stores most of its other prefs in a binary plist that's not really worth versioning, so the dotfiles deliberately skip that — there's a one-time UI walkthrough in [First-time setup](#first-time-setup-on-a-fresh-mac).
 
-### Git, tuned for actually reading diffs
+### 🌳 Git, tuned for actually reading diffs
 
 - [**delta**](https://github.com/dandavella/delta) as the diff pager — side-by-side, syntax-highlighted, line numbers. Once you've used it you can't go back.
 - **`merge.conflictstyle = zdiff3`** — three-way conflict markers. Saved me hours on gnarly merges; if you've never tried it, do.
 - Short aliases: `co`, `ci`, `st`, `br`, plus `lg` (compact graph log) and `grog` (the same but more decorated). Nothing fancy, just muscle memory.
 - A global `~/.config/git/ignore` so I don't `.gitignore`-update every project for the same `.DS_Store` and editor-swap-files.
 
-### Keyboard and windowing
+### ⌨️ Keyboard and windowing
 
 The combination that turned macOS from frustrating to fluent for me:
 
@@ -60,7 +60,7 @@ The combination that turned macOS from frustrating to fluent for me:
   - Auto-reload when I edit a config file — so iterating on bindings doesn't mean menubar clicks.
 - **[Raycast](https://www.raycast.com/)** — Spotlight replacement and command palette for everything else. The dotfiles ship a few script commands: `daily-note` (opens my Obsidian daily note), `journal` (timestamped capture to a file), `weather` (wttr.in via curl), `lock-screen`. Raycast preferences themselves live in a sandboxed app container and don't version cleanly — Raycast Pro's cloud sync handles that side.
 
-### Capturing thoughts, scriptures, and books
+### 📚 Capturing thoughts, scriptures, and books
 
 I do a lot of reading and note-taking — both for theological study at Ridley and for general knowledge work. The setup leans into that:
 
@@ -69,7 +69,7 @@ I do a lot of reading and note-taking — both for theological study at Ridley a
 - **Calibre auto-import.** I read a lot of ebooks, and they accumulate from various sources — Adobe Digital Editions drops them in `~/Documents/Digital Editions/`, sometimes I download direct to `~/Downloads`. A LaunchAgent watches both folders; new `.epub`/`.pdf`/`.mobi` files get piped through `calibredb add` into the library and the originals deleted. Skips silently while Calibre is open and re-fires on the next file event.
 - **Obsidian** is installed via the Brewfile but its package is currently a [scaffold/README](obsidian/README.md). I'll wire up the vault when I've decided where it lives — the README documents what's worth tracking (`community-plugins.json`, `hotkeys.json`, snippets, templates) and what to ignore (`workspace.json` and friends rewrite on every focus change — pure diff noise).
 
-### Quiet machine maintenance
+### 🧹 Quiet machine maintenance
 
 The bits that just need to *be there*:
 
@@ -78,7 +78,7 @@ The bits that just need to *be there*:
 - **Time Machine excludes** ([`scripts/time-machine-excludes.sh`](scripts/time-machine-excludes.sh)) — `tmutil addexclusion` for build artefacts, language toolchain caches, Docker container dirs, and a `~/code/*/{node_modules,.next,dist,build,target,…}` sweep. Run once after Time Machine is configured; idempotent.
 - **macOS defaults** ([`scripts/set-defaults.sh`](scripts/set-defaults.sh)) — opinionated system preferences: fast key repeat, tap-to-click, Finder showing hidden files and full POSIX paths, screenshots as PNG, Australian locale (en-AU, AUD, Centimeters, Celsius, DD/MM/YYYY), Safari privacy (no autofill of credentials/cards/contacts/forms — Bitwarden owns that responsibility), Develop menu, login items for Bitwarden/Stats/Raycast/Hammerspoon. Disabled by default in `install.sh`; uncomment the line at the bottom when you're ready to apply.
 
-### What's in the Brewfile
+### 🍺 What's in the Brewfile
 
 Roughly 60 entries. The interesting categories:
 
@@ -90,7 +90,7 @@ Roughly 60 entries. The interesting categories:
 
 `brew bundle dump --force` keeps `Brewfile` honest when I install something new and forget to add it.
 
-## How the repo is shaped
+## 🏗 How the repo is shaped
 
 ```
 dotfiles/
@@ -111,7 +111,7 @@ A few patterns I lean on:
 - **LaunchAgents over cron.** macOS doesn't have crontab in any meaningful way; launchd is the right tool. Three personal agents live in [`macos/Library/LaunchAgents/`](macos/Library/LaunchAgents/) — XDG env exporter, Calibre inbox importer, daily journal stamper. Adding new ones is a copy-paste of the plist shape.
 - **Idempotent vs convergent.** Most steps in `install.sh` are idempotent (no-op if already done). The Brewfile install is *convergent* — it'll upgrade casks when upstream has a newer version, so it does real work on re-run, just nothing destructive.
 
-## What `install.sh` actually does
+## 🛠 What `install.sh` actually does
 
 Eight steps. Re-runnable.
 
@@ -124,7 +124,7 @@ Eight steps. Re-runnable.
 7. **bat theme** — downloads Tokyo Night `tmTheme`, rebuilds bat's syntax cache.
 8. **macOS defaults** — opt-in. Read `scripts/set-defaults.sh`, then uncomment the call at the bottom of `install.sh` to enable.
 
-## First-time setup on a fresh Mac
+## ✨ First-time setup on a fresh Mac
 
 A handful of things macOS won't let an installer do automatically. Each is a one-time click:
 
@@ -137,7 +137,7 @@ A handful of things macOS won't let an installer do automatically. Each is a one
    - **Working directory.** Settings → Profiles → General → Working Directory → *Reuse previous session's directory*.
    - **Optional plist sync.** Settings → General → Preferences → tick *Load preferences from a custom folder or URL*, point at `~/.config/iterm2/`. iTerm2 will offer to copy current settings into that folder — accept. Then tick *Save changes to folder when iTerm2 quits*. The full plist is now in the repo. Skip this if you'd rather not commit binary settings — the colour presets alone reproduce the theme.
 
-## Adding a new package
+## ➕ Adding a new package
 
 To track a new tool's config (`starship` as an example):
 
@@ -155,7 +155,7 @@ To track a new tool's config (`starship` as an example):
 
 For sensitive bits, see the [secrets pattern](#how-the-repo-is-shaped) — keep a sibling local file alongside the symlinked config and gitignore it.
 
-## Updating
+## 🔄 Updating
 
 After pulling new commits, re-run the bootstrap:
 
@@ -172,4 +172,4 @@ brew bundle --file=./Brewfile                                                   
 stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast ssh     # Re-link
 ```
 
-**Don't run `./install.sh` while another `brew bundle` is in flight** — the daily `brew upgrade` job in `.zshrc` can collide with it on the same download and you'll get a "process has already locked" error. Wait for the background job to finish (or `pkill -f "brew (bundle|fetch|upgrade)"` if it's stuck) before re-running.
+⚠️ **Don't run `./install.sh` while another `brew bundle` is in flight** — the daily `brew upgrade` job in `.zshrc` can collide with it on the same download and you'll get a "process has already locked" error. Wait for the background job to finish (or `pkill -f "brew (bundle|fetch|upgrade)"` if it's stuck) before re-running.
