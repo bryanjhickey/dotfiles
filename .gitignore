@@ -5,3 +5,35 @@ vim/pack/minpac/start
 *.swp
 job-specific.sh
 scripts/dark-mode-notify
+
+# --- Privacy / secrets -------------------------------------------------
+# Belt-and-braces guards against committing PII or app data that lands
+# in the repo because of "save back to dotfiles folder"-style features.
+
+# Espanso secrets — local-only file holding contact details, tokens, etc.
+**/match/secrets.yml
+**/match/secrets.*.yml
+
+# iTerm2 — when "Load prefs from custom folder" is on, iTerm2 drops
+# several things into `~/.config/iterm2/` (which is symlinked to the
+# repo via Stow):
+#   - com.googlecode.iterm2.plist  binary prefs, contains user paths
+#   - AppSupport                   SYMLINK back to ~/Library/Application
+#                                  Support/iTerm2/ — exposes saved
+#                                  sessions, Notes, scripts, profile data
+#   - sockets/                     UNIX domain sockets for iTerm2 IPC
+# Opt in explicitly via `git add -f <path>` if you want any of these.
+iterm2/.config/iterm2/com.googlecode.iterm2.plist
+iterm2/.config/iterm2/AppSupport
+iterm2/.config/iterm2/AppSupport/
+iterm2/.config/iterm2/sockets
+iterm2/.config/iterm2/sockets/
+
+# Generic catch-alls
+**/secrets.env
+**/.env
+**/.env.local
+*.pem
+*.key
+id_rsa
+id_ed25519

@@ -1,0 +1,37 @@
+# espanso match file
+#
+# Public, non-sensitive triggers only. PII (emails, phone, ABN, etc.)
+# lives in `match/secrets.yml` — a real local file that is NOT tracked,
+# NOT symlinked, and NOT committed. See README → Handling secrets.
+#
+# yaml-language-server: $schema=https://raw.githubusercontent.com/espanso/espanso/dev/schemas/match.schema.json
+
+matches:
+  # --- Dates / times -------------------------------------------------
+
+  - trigger: ";date"
+    label: "ISO date (YYYY-MM-DD)"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - trigger: "ddate"
+    label: "Bracketed ISO date for daily notes"
+    replace: "[[{{mydate}}]]"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - trigger: "ttime"
+    label: "HH:MM time stamp (with trailing dash)"
+    replace: "{{t}} - "
+    vars:
+      - name: t
+        type: date
+        params:
+          format: "%H:%M"

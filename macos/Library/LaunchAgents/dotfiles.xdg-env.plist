@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Exports XDG_* to the GUI session at login so apps launched from Finder/Dock
+     (notably Hyper — see https://github.com/vercel/hyper/issues/137) read the
+     same XDG_CONFIG_HOME the shell does. Mirrors the values in zsh/.zshenv. -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>dotfiles.xdg-env</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/sh</string>
+        <string>-c</string>
+        <string>launchctl setenv XDG_CONFIG_HOME "$HOME/.config"; launchctl setenv XDG_DATA_HOME "$HOME/.local/share"; launchctl setenv XDG_CACHE_HOME "$HOME/.cache"; launchctl setenv XDG_STATE_HOME "$HOME/.local/state"</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>
