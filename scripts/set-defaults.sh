@@ -5,7 +5,7 @@
 
 COMPUTER_NAME="virus"
 STEP=0
-TOTAL=11
+TOTAL=12
 
 progress() {
   STEP=$((STEP + 1))
@@ -14,7 +14,7 @@ progress() {
 
 # Close any open System Settings panes, to prevent them from overriding
 # settings we’re about to change
-osascript -e ‘tell application "System Settings" to quit’
+osascript -e 'tell application "System Settings" to quit'
 
 # Ask for the administrator password upfront
 sudo -v
@@ -61,6 +61,18 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+progress "Configuring locale (Australia)"
+
+# Set language and region to Australian English with metric units and AUD currency
+defaults write NSGlobalDomain AppleLanguages -array "en-AU"
+defaults write NSGlobalDomain AppleLocale -string "en_AU@currency=AUD"
+defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
+defaults write NSGlobalDomain AppleMetricUnits -bool true
+defaults write NSGlobalDomain AppleTemperatureUnit -string "Celsius"
+
+# Use AU date format (DD/MM/YYYY) in Finder
+defaults write NSGlobalDomain AppleICUDateFormatStrings -dict 1 "d/MM/y"
 
 progress "Configuring trackpad and keyboard"
 
@@ -281,6 +293,29 @@ defaults write com.apple.commerce AutoUpdate -bool true
 
 # Allow the App Store to reboot machine on macOS updates
 defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
+
+progress "Configuring Safari privacy"
+
+# Don't autofill credentials, credit cards, or contacts — Bitwarden handles that
+defaults write com.apple.Safari AutoFillFromAddressBook -bool false
+defaults write com.apple.Safari AutoFillPasswords -bool false
+defaults write com.apple.Safari AutoFillCreditCardData -bool false
+defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
+
+# Don't auto-open "safe" downloads (PDFs, images, archives) — defence-in-depth
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
+# Send Do Not Track header
+defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+
+# Show full URL in address bar
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+
+# Enable the Develop menu and Web Inspector
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 progress "Configuring Photos and Google Chrome"
 

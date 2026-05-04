@@ -126,7 +126,12 @@ curl -so "$(bat --config-dir)/themes/tokyonight_night.tmTheme" \
 bat cache --build
 
 progress "Setting macOS defaults"
-echo "  Skipped — uncomment the line below to enable"
+# Opt-in. set-defaults.sh applies ~120 `defaults write` calls (Finder, keyboard,
+# trackpad, screenshots, Aussie locale, Safari privacy, etc.); set-hostname.sh
+# corrects macOS's hostname-suffix drift between Wi-Fi/wired networks. Read
+# both before enabling. They prompt for sudo and require a logout to fully
+# apply some settings.
+echo "  Skipped — uncomment the lines below to enable"
 # ./scripts/set-defaults.sh
 # ./scripts/set-hostname.sh
 

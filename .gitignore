@@ -4,7 +4,6 @@ vim/pack/minpac/start
 **.netrwhist
 *.swp
 job-specific.sh
-scripts/dark-mode-notify
 
 # --- Privacy / secrets -------------------------------------------------
 # Belt-and-braces guards against committing PII or app data that lands
