@@ -5,7 +5,7 @@
 
 COMPUTER_NAME="virus"
 STEP=0
-TOTAL=12
+TOTAL=13
 
 progress() {
   STEP=$((STEP + 1))
@@ -316,6 +316,35 @@ defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+
+progress "Configuring login items"
+
+# Helper: add an app to login items if it isn't already there. Idempotent.
+add_login_item() {
+  local name="$1"
+  local path="$2"
+  if [ ! -d "$path" ]; then
+    echo "  skip $name (not installed at $path)"
+    return
+  fi
+  osascript - "$name" "$path" <<'EOF' >/dev/null 2>&1
+on run argv
+  set itemName to item 1 of argv
+  set itemPath to item 2 of argv
+  tell application "System Events"
+    if not (exists login item itemName) then
+      make login item at end with properties {path:itemPath, hidden:true}
+    end if
+  end tell
+end run
+EOF
+  echo "  ✓ $name"
+}
+
+add_login_item "Bitwarden"  "/Applications/Bitwarden.app"
+add_login_item "Stats"      "/Applications/Stats.app"
+add_login_item "Raycast"    "/Applications/Raycast.app"
+add_login_item "Hammerspoon" "/Applications/Hammerspoon.app"
 
 progress "Configuring Photos and Google Chrome"
 

@@ -95,10 +95,11 @@ mkdir -p "$HOME/.config/zsh"
 mkdir -p "$HOME/.config/git"
 mkdir -p "$HOME/.config/karabiner"
 mkdir -p "$HOME/.config/raycast/scripts"
+mkdir -p "$HOME/.ssh"
 mkdir -p "$HOME/Library/LaunchAgents"
 mkdir -p "$HOME/Library/Application Support/espanso/config"
 mkdir -p "$HOME/Library/Application Support/espanso/match"
-stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast
+stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast ssh
 
 progress "Loading personal LaunchAgents"
 # XDG vars for GUI apps (Hammerspoon, iTerm2, Espanso, …)
@@ -109,6 +110,8 @@ launchctl setenv XDG_CACHE_HOME "$HOME/.cache"
 launchctl setenv XDG_STATE_HOME "$HOME/.local/state"
 # Calibre auto-import — watches ~/Downloads + ~/Documents/Digital Editions
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.calibre-import.plist" 2>/dev/null || true
+# Daily journal stamp — appends a date header to ~/Documents/journal.md at 6am
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.daily-journal.plist" 2>/dev/null || true
 
 progress "Installing Node.js via asdf"
 asdf plugin add nodejs 2>/dev/null || true

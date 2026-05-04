@@ -36,3 +36,11 @@ iterm2/.config/iterm2/sockets/
 *.key
 id_rsa
 id_ed25519
+id_rsa.pub
+id_ed25519.pub
+known_hosts
+authorized_keys
+
+# SSH host overrides — per-machine, never committed
+ssh/.ssh/config.local
+**/.ssh/config.local

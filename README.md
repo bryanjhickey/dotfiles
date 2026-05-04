@@ -16,8 +16,8 @@ cd ~/code/dotfiles
 
 1. **Xcode CLT** — `xcode-select --install` (no-op if already installed)
 2. **Homebrew + Brewfile** — installs Homebrew if missing, then runs the wrapped `brewfile_install` (missing-items preview, real-time per-package output, timed pass/fail summary)
-3. **Stow** — symlinks `zsh`, `git`, `iterm2`, `macos`, `espanso`, `karabiner`, `hammerspoon`, `raycast` packages into `$HOME`
-4. **XDG LaunchAgent** — bootstraps `dotfiles.xdg-env.plist` and exports XDG vars to the current GUI session so iTerm2/Espanso/etc. see them at launch
+3. **Stow** — symlinks `zsh`, `git`, `iterm2`, `macos`, `espanso`, `karabiner`, `hammerspoon`, `raycast`, `ssh` packages into `$HOME`
+4. **LaunchAgents** — bootstraps `dotfiles.xdg-env.plist` (XDG vars for GUI apps), `dotfiles.calibre-import.plist` (auto-import ebooks from `~/Downloads` and `~/Documents/Digital Editions/`), and `dotfiles.daily-journal.plist` (6am date header in `~/Documents/journal.md`)
 5. **Node.js** — latest version via `asdf`
 6. **fzf-git** — clones the fzf-git keybindings into `~/.config/fzf/`
 7. **bat theme** — downloads Tokyo Night `tmTheme` and rebuilds bat's syntax cache
@@ -61,9 +61,21 @@ cd ~/code/dotfiles
 
 ### Notes & Reading
 
-- **`note <text>`** / **`obs <text>`** / **`daily`** — shell quick-capture in [zsh/notes.zsh](zsh/notes.zsh). `note` always works (appends to `~/Documents/journal.md`); `obs` requires `$OBSIDIAN_VAULT` set; `daily` opens today's note via the `obsidian://` URL scheme.
+- **`note <text>`** / **`obs <text>`** / **`daily`** — shell quick-capture in [zsh/.config/zsh/notes.zsh](zsh/.config/zsh/notes.zsh). `note` always works (appends to `~/Documents/journal.md`); `obs` requires `$OBSIDIAN_VAULT` set; `daily` opens today's note via the `obsidian://` URL scheme.
 - **Calibre auto-import** — [scripts/inbox-to-calibre.sh](scripts/inbox-to-calibre.sh) plus a LaunchAgent ([macos/Library/LaunchAgents/dotfiles.calibre-import.plist](macos/Library/LaunchAgents/dotfiles.calibre-import.plist)) watch `~/Downloads` and `~/Documents/Digital Editions/`. New `.epub`/`.pdf`/`.mobi` etc. files are moved into the Calibre library automatically (skips silently while Calibre is open — re-fires on next file add).
+- **Daily journal stamp** — a 6am LaunchAgent ([dotfiles.daily-journal.plist](macos/Library/LaunchAgents/dotfiles.daily-journal.plist)) appends a date header to `~/Documents/journal.md` so you start each day with a clean section to write under.
 - **Obsidian** — package is currently a [scaffold/README](obsidian/README.md). Wire up your vault when you've decided on a location.
+
+### SSH
+
+- [ssh/.ssh/config](ssh/.ssh/config) tracks defaults (`UseKeychain`, `AddKeysToAgent`, ServerAlive timers) and the GitHub host alias.
+- Per-machine overrides go in `~/.ssh/config.local` (gitignored). The base config ends with `Include ~/.ssh/config.local`, so SSH falls back gracefully when the file doesn't exist.
+- Defensive `.gitignore` patterns block `id_rsa`, `id_ed25519`, `*.pem`, `*.key`, `known_hosts`, `authorized_keys` from ever being staged.
+
+### System Maintenance
+
+- [scripts/time-machine-excludes.sh](scripts/time-machine-excludes.sh) — `tmutil addexclusion` for build artefacts, language toolchain caches, and `~/code/*/{node_modules,.next,dist,build,target,…}`. Run once after Time Machine is configured.
+- Login items: `set-defaults.sh` registers Bitwarden, Stats, Raycast, Hammerspoon as login items (idempotent — skips if already present).
 
 ### macOS Defaults
 
@@ -125,6 +137,8 @@ dotfiles/
 │       └── dotfiles.xdg-env.plist  # Exports XDG_* to GUI apps launched from Finder/Dock
 ├── raycast/
 │   └── .config/raycast/scripts/    # Script commands (point Raycast at this dir)
+├── ssh/
+│   └── .ssh/config                 # Public SSH client config; per-machine bits go in ~/.ssh/config.local (gitignored)
 └── zsh/
     ├── .zshenv                 # Sets XDG dirs and ZDOTDIR
     └── .config/zsh/
@@ -199,5 +213,5 @@ Or just the pieces you need:
 
 ```bash
 brew bundle --file=./Brewfile                                # New dependencies only
-stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast           # Re-link (idempotent)
+stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast ssh           # Re-link (idempotent)
 ```
