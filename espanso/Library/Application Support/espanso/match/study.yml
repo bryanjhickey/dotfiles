@@ -1,0 +1,76 @@
+# Espanso match file — study & writing helpers.
+#
+# Public, non-sensitive triggers for academic / theological writing.
+# Anything PII or secret-shaped goes in match/secrets.yml (gitignored).
+#
+# yaml-language-server: $schema=https://raw.githubusercontent.com/espanso/espanso/dev/schemas/match.schema.json
+
+matches:
+  # --- Footnote skeleton ---------------------------------------------
+  # Markdown / Pandoc footnote pair. Cursor lands at $|$.
+  - trigger: ";fn"
+    label: "Markdown footnote pair"
+    replace: "[^$|$]\n\n[^$|$]: "
+
+  # --- Scripture reference --------------------------------------------
+  # Bracketed ref for daily-note linking, e.g. [[John 3:16]].
+  - trigger: ";ref"
+    label: "Bracketed scripture reference (cursor inside)"
+    replace: "[[$|$]]"
+
+  # --- Hebrew Bible book abbreviations -------------------------------
+  # Tap-expanding the most-typed book names. Add more as you discover
+  # what you actually use; these are starters.
+  - trigger: ";gen"
+    replace: "Genesis"
+  - trigger: ";exo"
+    replace: "Exodus"
+  - trigger: ";lev"
+    replace: "Leviticus"
+  - trigger: ";num"
+    replace: "Numbers"
+  - trigger: ";deu"
+    replace: "Deuteronomy"
+  - trigger: ";psa"
+    replace: "Psalms"
+  - trigger: ";pro"
+    replace: "Proverbs"
+  - trigger: ";ecc"
+    replace: "Ecclesiastes"
+  - trigger: ";isa"
+    replace: "Isaiah"
+
+  # --- New Testament book abbreviations ------------------------------
+  - trigger: ";mat"
+    replace: "Matthew"
+  - trigger: ";mar"
+    replace: "Mark"
+  - trigger: ";luk"
+    replace: "Luke"
+  - trigger: ";joh"
+    replace: "John"
+  - trigger: ";act"
+    replace: "Acts"
+  - trigger: ";rom"
+    replace: "Romans"
+  - trigger: ";1co"
+    replace: "1 Corinthians"
+  - trigger: ";2co"
+    replace: "2 Corinthians"
+  - trigger: ";gal"
+    replace: "Galatians"
+  - trigger: ";eph"
+    replace: "Ephesians"
+  - trigger: ";phi"
+    replace: "Philippians"
+  - trigger: ";heb"
+    replace: "Hebrews"
+  - trigger: ";rev"
+    replace: "Revelation"
+
+  # --- Citation prompt -----------------------------------------------
+  # Wraps selection in author/year parens. Replace with a Zotero pick
+  # via `zotero://` URL when you're ready to integrate Zotero deeper.
+  - trigger: ";cite"
+    label: "Citation skeleton (Author, YYYY)"
+    replace: "($|$, $|$)"

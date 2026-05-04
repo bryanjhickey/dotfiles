@@ -125,3 +125,6 @@ eval "$(direnv hook zsh)"
 
 # ---- Starship prompt ----
 eval "$(starship init zsh)"
+
+# ---- Quick-capture commands (note, obs, daily) ----
+source "$ZDOTDIR/notes.zsh"

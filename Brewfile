@@ -85,6 +85,7 @@ cask "zoom"
 
 # Casks - Utilities
 cask "adobe-digital-editions"
+cask "calibre"
 cask "stats"
 
 # Fonts

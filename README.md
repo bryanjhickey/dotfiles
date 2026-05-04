@@ -56,9 +56,14 @@ cd ~/code/dotfiles
 
 ### Text Expansion (Espanso)
 
-- [Espanso](https://espanso.org/) v2 layout — `config/default.yml` for global settings, `match/base.yml` for triggers
-- Built-in triggers for ISO date, time stamps, contact details (emails, phone), and reference numbers
+- [Espanso](https://espanso.org/) v2 layout — `config/default.yml` for global settings, `match/base.yml` for date/time triggers, `match/study.yml` for academic/theological writing helpers (footnote pairs, scripture references, ~20 Bible book abbreviations, citation skeletons)
 - `match/secrets.yml` is reserved for sensitive triggers (kept local, not symlinked, not committed)
+
+### Notes & Reading
+
+- **`note <text>`** / **`obs <text>`** / **`daily`** — shell quick-capture in [zsh/notes.zsh](zsh/notes.zsh). `note` always works (appends to `~/Documents/journal.md`); `obs` requires `$OBSIDIAN_VAULT` set; `daily` opens today's note via the `obsidian://` URL scheme.
+- **Calibre auto-import** — [scripts/inbox-to-calibre.sh](scripts/inbox-to-calibre.sh) plus a LaunchAgent ([macos/Library/LaunchAgents/dotfiles.calibre-import.plist](macos/Library/LaunchAgents/dotfiles.calibre-import.plist)) watch `~/Downloads` and `~/Documents/Digital Editions/`. New `.epub`/`.pdf`/`.mobi` etc. files are moved into the Calibre library automatically (skips silently while Calibre is open — re-fires on next file add).
+- **Obsidian** — package is currently a [scaffold/README](obsidian/README.md). Wire up your vault when you've decided on a location.
 
 ### macOS Defaults
 

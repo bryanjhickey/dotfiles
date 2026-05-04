@@ -100,12 +100,15 @@ mkdir -p "$HOME/Library/Application Support/espanso/config"
 mkdir -p "$HOME/Library/Application Support/espanso/match"
 stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast
 
-progress "Loading XDG LaunchAgent (exports XDG_CONFIG_HOME to GUI apps)"
+progress "Loading personal LaunchAgents"
+# XDG vars for GUI apps (Hammerspoon, iTerm2, Espanso, …)
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.xdg-env.plist" 2>/dev/null || true
 launchctl setenv XDG_CONFIG_HOME "$HOME/.config"
 launchctl setenv XDG_DATA_HOME "$HOME/.local/share"
 launchctl setenv XDG_CACHE_HOME "$HOME/.cache"
 launchctl setenv XDG_STATE_HOME "$HOME/.local/state"
+# Calibre auto-import — watches ~/Downloads + ~/Documents/Digital Editions
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.calibre-import.plist" 2>/dev/null || true
 
 progress "Installing Node.js via asdf"
 asdf plugin add nodejs 2>/dev/null || true
