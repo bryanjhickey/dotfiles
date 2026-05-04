@@ -16,7 +16,7 @@ cd ~/code/dotfiles
 
 1. **Xcode CLT** — `xcode-select --install` (no-op if already installed)
 2. **Homebrew + Brewfile** — installs Homebrew if missing, then runs the wrapped `brewfile_install` (missing-items preview, real-time per-package output, timed pass/fail summary)
-3. **Stow** — symlinks `zsh`, `git`, `iterm2`, `macos`, `espanso` packages into `$HOME`
+3. **Stow** — symlinks `zsh`, `git`, `iterm2`, `macos`, `espanso`, `karabiner`, `hammerspoon`, `raycast` packages into `$HOME`
 4. **XDG LaunchAgent** — bootstraps `dotfiles.xdg-env.plist` and exports XDG vars to the current GUI session so iTerm2/Espanso/etc. see them at launch
 5. **Node.js** — latest version via `asdf`
 6. **fzf-git** — clones the fzf-git keybindings into `~/.config/fzf/`
@@ -47,6 +47,12 @@ cd ~/code/dotfiles
 - [iTerm2](https://iterm2.com/) with [Monokai Pro](https://monokai.pro/) and Octagon `.itermcolors` presets
 - [MesloLGS Nerd Font](https://github.com/ryanoasis/nerd-fonts) for icon glyphs in `eza`, Powerlevel10k, etc.
 - Optional plist sync to dotfiles via iTerm2's "Load preferences from a custom folder" setting (see [iTerm2 Setup](#iterm2-setup) below)
+
+### Keyboard & Window Automation
+
+- **[Karabiner-Elements](https://karabiner-elements.pqrs.org/)** — `karabiner.json` with Caps Lock as Escape (tap) / Hyper ⌃⌥⇧⌘ (hold), and Shift+Shift→Caps Lock (so Caps Lock isn't lost).
+- **[Hammerspoon](https://www.hammerspoon.org/)** — Lua-driven window management (`Hyper+H/J/K/L` halves, `U/I/N/,` quarters, `M` maximise, `C` centre-70%, arrows to move between monitors), app focus/launch (`Hyper+B` Chrome, `T` iTerm, `E` VS Code, `O` Obsidian, …), dark/light mode wallpaper switching, and auto-reload on file save.
+- **[Raycast](https://www.raycast.com/)** script commands — `daily-note` (opens Obsidian's daily note), `journal` (timestamped append to `~/Documents/journal.md`), `weather` (wttr.in), `lock-screen`. Add the directory in Raycast → Settings → Extensions → Add Script Directory → `~/.config/raycast/scripts`.
 
 ### Text Expansion (Espanso)
 
@@ -95,6 +101,16 @@ dotfiles/
 │   └── Library/Application Support/espanso/
 │       ├── config/default.yml  # Global Espanso settings
 │       └── match/base.yml      # Text-expansion triggers (secrets stay in match/secrets.yml — local only)
+├── hammerspoon/
+│   └── .hammerspoon/
+│       ├── init.lua            # Sets up Hyper key, loads modules
+│       ├── windows.lua         # Half/quarter/centre/multi-monitor window bindings
+│       ├── apps.lua            # Hyper+letter → focus/launch app
+│       ├── darkmode.lua        # Wallpaper switch on system theme change
+│       └── reload.lua          # Auto-reload config on edit
+├── karabiner/
+│   └── .config/karabiner/
+│       └── karabiner.json      # Caps Lock → Escape/Hyper, Shift+Shift → Caps Lock
 ├── iterm2/
 │   └── .config/iterm2/
 │       ├── Monokai Pro.itermcolors          # Color preset (import via Settings → Profiles → Colors)
@@ -102,6 +118,8 @@ dotfiles/
 ├── macos/
 │   └── Library/LaunchAgents/
 │       └── dotfiles.xdg-env.plist  # Exports XDG_* to GUI apps launched from Finder/Dock
+├── raycast/
+│   └── .config/raycast/scripts/    # Script commands (point Raycast at this dir)
 └── zsh/
     ├── .zshenv                 # Sets XDG dirs and ZDOTDIR
     └── .config/zsh/
@@ -116,6 +134,14 @@ dotfiles/
 - `~/.config/zsh/.zprofile` → `dotfiles/zsh/.config/zsh/.zprofile`
 
 Always pass `--target="$HOME"`. Stow's default target is the parent of the current directory (i.e. `~/code/`), which would land symlinks in the wrong place.
+
+## Karabiner / Hammerspoon / Raycast Setup
+
+These three need manual one-time setup on a fresh Mac because each requires a macOS permission grant Stow can't issue:
+
+1. **Karabiner-Elements** — first launch will prompt you to grant a kernel driver and Input Monitoring permission via *System Settings → Privacy & Security*. After approval Karabiner reads `~/.config/karabiner/karabiner.json` automatically. Verify Caps Lock now sends Escape (tap) and Hyper (hold).
+2. **Hammerspoon** — first launch will prompt for Accessibility permission. Approve, then click the Hammerspoon menu-bar icon → *Reload Config*. You'll see a toast "Hammerspoon: config loaded". Test with `Hyper+H` (focus moves left half) or `Hyper+M` (maximise).
+3. **Raycast** — open Raycast → Settings → Extensions → ⊕ → Add Script Directory → choose `~/.config/raycast/scripts`. The `daily-note`, `journal`, `weather`, `lock-screen` commands will now appear when you search Raycast.
 
 ## iTerm2 Setup
 
@@ -168,5 +194,5 @@ Or just the pieces you need:
 
 ```bash
 brew bundle --file=./Brewfile                                # New dependencies only
-stow --target="$HOME" zsh git iterm2 macos espanso           # Re-link (idempotent)
+stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast           # Re-link (idempotent)
 ```
