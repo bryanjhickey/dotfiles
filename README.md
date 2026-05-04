@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal macOS development environment managed with [GNU Stow](https://www.gnu.org/software/stow/) and [Homebrew](https://brew.sh/).
+Personal macOS development environment managed with [GNU Stow](https://www.gnu.org/software/stow/) and [Homebrew](https://brew.sh/). See [CHANGELOG.md](CHANGELOG.md) for a history of notable changes.
 
 ## Bootstrap
 

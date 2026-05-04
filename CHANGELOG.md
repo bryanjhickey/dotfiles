@@ -1,0 +1,75 @@
+# Changelog
+
+Notable changes to this dotfiles repo, newest first. Format loosely based on
+[Keep a Changelog](https://keepachangelog.com); since there are no semver
+releases, entries are dated.
+
+## 2026-05-04 — Multi-phase non-developer rollout
+
+Four self-contained phases shipped over an evening, each its own commit.
+
+### Added
+
+- **Karabiner-Elements** package ([`karabiner/.config/karabiner/karabiner.json`](karabiner/.config/karabiner/karabiner.json)) — Caps Lock as Escape on tap and Hyper (⌃⌥⇧⌘) on hold; Shift+Shift recovers Caps Lock; standard fn function-key mapping.
+- **Hammerspoon** package — five Lua modules under [`hammerspoon/.hammerspoon/`](hammerspoon/.hammerspoon/):
+  - `init.lua` defines the Hyper modifier set, loads modules, shows a load toast.
+  - `windows.lua` — Hyper+H/J/K/L for halves, U/I/N/, for quarters, M maximise, C centre-70%, ←/→ to move between monitors.
+  - `apps.lua` — table-driven Hyper+letter app focus/launch (`B` Chrome, `T` iTerm, `E` VS Code, `O` Obsidian, `S` Slack, `G` Logos, `Z` Zotero, `F` Finder, `P` Preview, `W` WhatsApp, `0` for `hs.expose`).
+  - `darkmode.lua` — listens for `AppleInterfaceThemeChangedNotification` and swaps wallpaper between black/silver. Replaces the deleted `dark-mode-notify` Swift+plist chain.
+  - `reload.lua` — `hs.pathwatcher` on `~/.hammerspoon/`, calls `hs.reload()` on save.
+- **Raycast script commands** ([`raycast/.config/raycast/scripts/`](raycast/.config/raycast/scripts/)) — `daily-note.sh` opens `obsidian://daily`; `journal.sh` appends a timestamped line to `~/Documents/journal.md`; `weather.sh` fetches wttr.in (refresh every 30 min); `lock-screen.sh` runs `pmset displaysleepnow`.
+- **`note` / `obs` / `daily` shell quick-capture** ([`zsh/.config/zsh/notes.zsh`](zsh/.config/zsh/notes.zsh)) — sourced from `.zshrc`. `note` always works; `obs` requires `$OBSIDIAN_VAULT`; `daily` opens today's note via the URL scheme.
+- **Espanso study triggers** ([`espanso/.../match/study.yml`](espanso/Library/Application%20Support/espanso/match/study.yml)) — markdown footnote pair, bracketed scripture reference, ~20 Bible book abbreviations, citation skeleton.
+- **Calibre auto-import** — [`scripts/inbox-to-calibre.sh`](scripts/inbox-to-calibre.sh) plus a LaunchAgent watch `~/Downloads` and `~/Documents/Digital Editions/`. New ebook-shaped files are moved into the Calibre library via `calibredb add`. Skips silently while Calibre is open and re-fires on next file add. Notifies via `osascript` on completion.
+- **Daily-journal LaunchAgent** ([`dotfiles.daily-journal.plist`](macos/Library/LaunchAgents/dotfiles.daily-journal.plist)) — fires at 06:00 daily, appends a date header (`## Friday 04 May 2026`) to `~/Documents/journal.md`.
+- **SSH config** package ([`ssh/.ssh/config`](ssh/.ssh/config)) — `UseKeychain`, `AddKeysToAgent`, ServerAlive timers, GitHub host alias. Ends with `Include ~/.ssh/config.local` for per-machine overrides (gitignored).
+- **Login items** block in `set-defaults.sh` — registers Bitwarden, Stats, Raycast, Hammerspoon via `osascript` (idempotent — checks `exists login item` first).
+- **Time Machine excludes** script ([`scripts/time-machine-excludes.sh`](scripts/time-machine-excludes.sh)) — `tmutil addexclusion` for build artefacts, language toolchain caches, Docker container dirs, Homebrew cellar, and a `~/code/*/` sweep for `node_modules`, `.next`, `dist`, `build`, `target`, `.turbo`, `.nuxt`, `.svelte-kit`, `.venv`, `__pycache__`.
+- **Obsidian scaffold** ([`obsidian/README.md`](obsidian/README.md)) — package documentation explaining what to track (`community-plugins.json`, `hotkeys.json`, snippets/templates) and what to ignore (`workspace.json`, plugin caches, theme code) when a vault is wired up later.
+
+### Changed
+
+- **`scripts/set-defaults.sh`**: added an Australian-locale block (en-AU, AUD, Centimeters, Celsius, DD/MM/YYYY date format) and a Safari privacy block (no autofill of credentials/cards/contacts/forms, Do-Not-Track, full-URL display, Develop menu enabled).
+- **Brewfile**: added `karabiner-elements`, `hammerspoon`, `calibre` casks.
+- **`install.sh`**: stow line now covers `zsh git iterm2 macos espanso karabiner hammerspoon raycast ssh`. The "Loading LaunchAgents" step bootstraps `dotfiles.{xdg-env,calibre-import,daily-journal}.plist`.
+- **README.md**: bootstrap section moved to the top with an 8-step description; new "What's Included" sections for Terminal, Keyboard & Window Automation, Notes & Reading, SSH, System Maintenance.
+- **`.gitignore`**: defensive globs for SSH keys (`id_rsa`, `id_ed25519`, both with and without `.pub`), `*.pem`, `*.key`, `known_hosts`, `authorized_keys`, plus `ssh/.ssh/config.local`.
+
+### Removed
+
+- Entire `install/` directory (953-line `macos.sh` plus four pre-Stow bootstrap scripts, all orphaned and unreferenced).
+- `scripts/dark-mode-notify.{swift,plist}`, `scripts/onSwitchDarkMode.sh`, `scripts/{pre,post}-link.sh`, `scripts/links.prop` — broken third-party Swift listener whose plist hardcoded `/Users/andrew/`. Replaced by `hammerspoon/.hammerspoon/darkmode.lua`.
+- `scripts/macos-hide-menubar.applescript` — unused, never wired anywhere.
+
+### Fixed
+
+- **`scripts/set-defaults.sh` line 17** used Unicode smart quotes (`‘…’`) instead of straight quotes, which would have failed shell parsing on the `osascript -e` invocation. The bug had been there since the file was first added.
+- Step counter in `set-defaults.sh` (`TOTAL=11`) didn't match the 10 actual `progress()` calls. Now correctly `TOTAL=13` after the Aussie locale, Safari privacy, and login-items additions.
+
+### Security
+
+- `match/secrets.yml` pattern documented in `obsidian/README.md` so future packages know to keep PII / tokens / passwords in local-only files outside git.
+
+## 2026-05-02 — Hyper → iTerm2 + Espanso restructure + visual brew bundle
+
+### Added
+
+- **iTerm2** Stow package ([`iterm2/.config/iterm2/`](iterm2/.config/iterm2/)) with Monokai Pro and Monokai Pro Octagon `.itermcolors` colour presets.
+- **Espanso v2 layout** ([`espanso/Library/Application Support/espanso/`](espanso/Library/Application%20Support/espanso/)) — `config/default.yml` for global settings, `match/base.yml` for date/time triggers. PII (emails, phone, ABN) split into a local-only `match/secrets.yml` that's not symlinked, not in the repo, and gitignored as belt-and-braces.
+- **macOS LaunchAgent** ([`macos/Library/LaunchAgents/dotfiles.xdg-env.plist`](macos/Library/LaunchAgents/dotfiles.xdg-env.plist)) — exports `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_CACHE_HOME`, `XDG_STATE_HOME` to the GUI session at login. Without this, GUI-launched apps (Hyper/Electron etc.) don't inherit the XDG vars from `zsh/.zshenv` and fall back to legacy paths. See [vercel/hyper#137](https://github.com/vercel/hyper/issues/137).
+- **`brewfile_install` wrapper** in `install.sh` — preflight `brew bundle check --verbose` enumerates missing items as a checklist with counts; runs `brew bundle install --verbose` so per-package output streams; ends with a timed pass/fail summary.
+
+### Changed
+
+- **Brewfile** synced to actually-installed packages. Removed stale entries (Hyper cask, Calibre, Logos, Logi Options+, Microsoft Office, OneDrive, Wispr Flow). Added `iterm2`, `affinity`, `antigravity`, `cleanmymac`, `firefox`, `microsoft-teams`, `ngrok` casks; `biome`, `coreutils`, `curl`, `docker-compose`, `git-filter-repo`, `pinentry-mac`, `poppler`, `python@3.11`, `railway`, `starship`, `tmux`, `uv` formulae; MAS entries for Bitwarden and WhatsApp.
+- **`.gitignore`** reinforced against the iTerm2 "Save changes to folder" feature, which created an `AppSupport` symlink back to `~/Library/Application Support/iTerm2/` (exposing saved sessions, Notes, scripts, profile data through the repo path) plus a `sockets/` directory.
+
+### Removed
+
+- Hyper `hyper/` Stow package (Hyper hadn't seen a meaningful upstream commit in ~2 years; the canary 4.x channel rolled back to 3.4.1 mid-debug; its config-format whiplash made it a poor target).
+
+## 2026-03-27 — Stow-based structure overhaul
+
+Repo reorganised around GNU Stow + Brewfile + a single `install.sh` bootstrap. Pre-Stow link scripts retired; each tracked tool became a Stow package whose internal layout mirrors where its files should land relative to `$HOME`. Starship prompt added. README rewritten.
+
+(See [`a43a86b`](https://github.com/bryanjhickey/dotfiles/commit/a43a86b) for the full diff. Earlier history pre-dates this changelog.)
