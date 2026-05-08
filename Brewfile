@@ -47,10 +47,6 @@ brew "poppler"
 # Media
 brew "yt-dlp"
 
-# Casks - Keyboard / window automation
-cask "hammerspoon"
-cask "karabiner-elements"
-
 # Casks - Terminal
 cask "iterm2"
 

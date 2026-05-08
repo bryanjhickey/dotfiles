@@ -93,16 +93,15 @@ brewfile_install ./Brewfile
 progress "Linking dotfiles with Stow"
 mkdir -p "$HOME/.config/zsh"
 mkdir -p "$HOME/.config/git"
-mkdir -p "$HOME/.config/karabiner"
 mkdir -p "$HOME/.config/raycast/scripts"
 mkdir -p "$HOME/.ssh"
 mkdir -p "$HOME/Library/LaunchAgents"
 mkdir -p "$HOME/Library/Application Support/espanso/config"
 mkdir -p "$HOME/Library/Application Support/espanso/match"
-stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast ssh
+stow --target="$HOME" zsh git iterm2 macos espanso raycast ssh
 
 progress "Loading personal LaunchAgents"
-# XDG vars for GUI apps (Hammerspoon, iTerm2, Espanso, …)
+# XDG vars for GUI apps (iTerm2, Espanso, …)
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.xdg-env.plist" 2>/dev/null || true
 launchctl setenv XDG_CONFIG_HOME "$HOME/.config"
 launchctl setenv XDG_DATA_HOME "$HOME/.local/share"

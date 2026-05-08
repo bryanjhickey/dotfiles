@@ -4,6 +4,15 @@ Notable changes to this dotfiles repo, newest first. Format loosely based on
 [Keep a Changelog](https://keepachangelog.com); since there are no semver
 releases, entries are dated.
 
+## 2026-05-08 — Drop Karabiner + Hammerspoon
+
+### Removed
+
+- `karabiner/` Stow package and the `karabiner-elements` Brewfile cask. Karabiner-Elements writes to `~/.config/karabiner/karabiner.json` directly, so the live config and `automatic_backups/` remain on disk untouched.
+- `hammerspoon/` Stow package (the five Lua modules — `init`, `windows`, `apps`, `darkmode`, `reload`) and the `hammerspoon` Brewfile cask.
+- Hammerspoon login-item line from `scripts/set-defaults.sh`.
+- Karabiner/Hammerspoon entries from `install.sh` (mkdir, stow line, XDG comment) and from `README.md` (Keyboard & windowing section, first-time setup steps, structure tree).
+
 ## 2026-05-04 — Multi-phase non-developer rollout
 
 Four self-contained phases shipped over an evening, each its own commit.

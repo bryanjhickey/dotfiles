@@ -14,7 +14,7 @@ cd ~/code/dotfiles
 
 `install.sh` is safe to re-run. Read it before you run it. There's a [step-by-step breakdown further down](#what-installsh-actually-does) if you'd rather know what you're agreeing to first.
 
-A few apps need permission grants Stow can't issue (kernel driver for Karabiner, Accessibility for Hammerspoon, etc.) — see [First-time setup on a fresh Mac](#first-time-setup-on-a-fresh-mac) below.
+A few apps need one-time UI setup Stow can't issue — see [First-time setup on a fresh Mac](#first-time-setup-on-a-fresh-mac) below.
 
 ## 🧭 The setup, briefly
 
@@ -48,17 +48,9 @@ The dotfiles ship two **Monokai Pro** colour presets (the standard one and the O
 - Short aliases: `co`, `ci`, `st`, `br`, plus `lg` (compact graph log) and `grog` (the same but more decorated). Nothing fancy, just muscle memory.
 - A global `~/.config/git/ignore` so I don't `.gitignore`-update every project for the same `.DS_Store` and editor-swap-files.
 
-### ⌨️ Keyboard and windowing
+### 🎯 Launcher
 
-The combination that turned macOS from frustrating to fluent for me:
-
-- **[Karabiner-Elements](https://karabiner-elements.pqrs.org/)** — Caps Lock as Escape on tap, **Hyper** (⌃⌥⇧⌘) on hold. Caps Lock by itself is wasted real estate; turning it into a Vim-friendly Escape *and* a never-conflicts modifier earns it back. Pressing both Shifts at once still gives me Caps Lock when I want it.
-- **[Hammerspoon](https://www.hammerspoon.org/)** — Lua-driven window and app automation. I use it for:
-  - Window tiling: `Hyper+H/J/K/L` for halves, `U/I/N/,` for quarters, `M` to maximise, `C` for a centred 70%, `←/→` to bounce between monitors. Replaces Spectacle/Magnet with something I can actually script.
-  - App jumps: `Hyper+B` Chrome, `T` iTerm, `E` VS Code, `O` Obsidian, `G` Logos, `Z` Zotero — focuses or launches, never both.
-  - System dark/light mode listener that swaps the wallpaper. (This used to be a third-party Swift binary with a hardcoded `/Users/andrew/` plist that had been broken for who knows how long. Hammerspoon does it in 20 lines of Lua.)
-  - Auto-reload when I edit a config file — so iterating on bindings doesn't mean menubar clicks.
-- **[Raycast](https://www.raycast.com/)** — Spotlight replacement and command palette for everything else. The dotfiles ship a few script commands: `daily-note` (opens my Obsidian daily note), `journal` (timestamped capture to a file), `weather` (wttr.in via curl), `lock-screen`. Raycast preferences themselves live in a sandboxed app container and don't version cleanly — Raycast Pro's cloud sync handles that side.
+**[Raycast](https://www.raycast.com/)** — Spotlight replacement and command palette. The dotfiles ship a few script commands: `daily-note` (opens my Obsidian daily note), `journal` (timestamped capture to a file), `weather` (wttr.in via curl), `lock-screen`. Raycast preferences themselves live in a sandboxed app container and don't version cleanly — Raycast Pro's cloud sync handles that side.
 
 ### 📚 Capturing thoughts, scriptures, and books
 
@@ -76,7 +68,7 @@ The bits that just need to *be there*:
 - **macOS LaunchAgent** [`dotfiles.xdg-env.plist`](macos/Library/LaunchAgents/dotfiles.xdg-env.plist) exports `XDG_CONFIG_HOME` and friends to the GUI session at login. macOS GUI apps don't inherit your shell environment — without this, anything you launch from Dock or Finder ignores `$XDG_CONFIG_HOME` even though `.zshenv` sets it. Took me a while to figure out, documented in [vercel/hyper#137](https://github.com/vercel/hyper/issues/137) for context.
 - **SSH config** at [`ssh/.ssh/config`](ssh/.ssh/config) — `UseKeychain`, `AddKeysToAgent`, ServerAlive timers, GitHub host alias. Per-machine bits (work hostnames, bastion IPs) go in `~/.ssh/config.local` (gitignored). Defensive `.gitignore` patterns block `id_rsa`, `id_ed25519`, `*.pem`, `*.key`, `known_hosts`, `authorized_keys` from ever being staged.
 - **Time Machine excludes** ([`scripts/time-machine-excludes.sh`](scripts/time-machine-excludes.sh)) — `tmutil addexclusion` for build artefacts, language toolchain caches, Docker container dirs, and a `~/code/*/{node_modules,.next,dist,build,target,…}` sweep. Run once after Time Machine is configured; idempotent.
-- **macOS defaults** ([`scripts/set-defaults.sh`](scripts/set-defaults.sh)) — opinionated system preferences: fast key repeat, tap-to-click, Finder showing hidden files and full POSIX paths, screenshots as PNG, Australian locale (en-AU, AUD, Centimeters, Celsius, DD/MM/YYYY), Safari privacy (no autofill of credentials/cards/contacts/forms — Bitwarden owns that responsibility), Develop menu, login items for Bitwarden/Stats/Raycast/Hammerspoon. Disabled by default in `install.sh`; uncomment the line at the bottom when you're ready to apply.
+- **macOS defaults** ([`scripts/set-defaults.sh`](scripts/set-defaults.sh)) — opinionated system preferences: fast key repeat, tap-to-click, Finder showing hidden files and full POSIX paths, screenshots as PNG, Australian locale (en-AU, AUD, Centimeters, Celsius, DD/MM/YYYY), Safari privacy (no autofill of credentials/cards/contacts/forms — Bitwarden owns that responsibility), Develop menu, login items for Bitwarden/Stats/Raycast. Disabled by default in `install.sh`; uncomment the line at the bottom when you're ready to apply.
 
 ### 🍺 What's in the Brewfile
 
@@ -98,7 +90,7 @@ dotfiles/
 ├── install.sh           # One-shot bootstrap, safe to re-run
 ├── scripts/             # set-defaults.sh, set-hostname.sh, time-machine-excludes.sh, inbox-to-calibre.sh
 ├── zsh/        git/        iterm2/      espanso/
-├── karabiner/  hammerspoon/ raycast/    macos/    ssh/    obsidian/
+├── raycast/    macos/      ssh/         obsidian/
 └── CHANGELOG.md
 ```
 
@@ -117,7 +109,7 @@ Eight steps. Re-runnable.
 
 1. **Xcode CLT** — `xcode-select --install`. No-op if installed.
 2. **Homebrew + Brewfile** — installs Homebrew if missing, then runs the wrapped `brewfile_install`: pre-flights `brew bundle check --verbose` to enumerate missing items as a clean checklist, runs the install with real-time per-package output, and prints a timed pass/fail summary at the end.
-3. **Stow** — `stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast ssh`.
+3. **Stow** — `stow --target="$HOME" zsh git iterm2 macos espanso raycast ssh`.
 4. **LaunchAgents** — bootstraps `dotfiles.xdg-env.plist`, `dotfiles.calibre-import.plist`, `dotfiles.daily-journal.plist` into the user's GUI domain.
 5. **Node.js** — latest stable via `asdf`.
 6. **fzf-git** — clones [junegunn/fzf-git.sh](https://github.com/junegunn/fzf-git.sh) into `~/.config/fzf/`.
@@ -128,10 +120,8 @@ Eight steps. Re-runnable.
 
 A handful of things macOS won't let an installer do automatically. Each is a one-time click:
 
-1. **Karabiner-Elements** — first launch prompts for kernel driver + Input Monitoring permission via *System Settings → Privacy & Security*. Approve, then verify Caps Lock now sends Escape on tap and Hyper on hold.
-2. **Hammerspoon** — first launch prompts for Accessibility permission. Approve, then menu bar icon → *Reload Config*. You'll see a "Hammerspoon: config loaded" toast. Test with `Hyper+H` (focus left half) or `Hyper+M` (maximise).
-3. **Raycast** — Settings → Extensions → ⊕ → *Add Script Directory* → `~/.config/raycast/scripts`. The `daily-note`, `journal`, `weather`, `lock-screen` commands appear in search.
-4. **iTerm2** — minimal manual config:
+1. **Raycast** — Settings → Extensions → ⊕ → *Add Script Directory* → `~/.config/raycast/scripts`. The `daily-note`, `journal`, `weather`, `lock-screen` commands appear in search.
+2. **iTerm2** — minimal manual config:
    - **Color preset.** Settings → Profiles → Colors → Color Presets → *Import…* → pick `~/.config/iterm2/Monokai Pro.itermcolors` (or the Octagon variant). Then Color Presets → Monokai Pro to apply.
    - **Font.** Settings → Profiles → Text → Font → MesloLGS Nerd Font, 13pt. *Use a different font for non-ASCII text* off.
    - **Working directory.** Settings → Profiles → General → Working Directory → *Reuse previous session's directory*.
@@ -169,7 +159,7 @@ Or just the parts you need:
 
 ```bash
 brew bundle --file=./Brewfile                                                            # New deps only
-stow --target="$HOME" zsh git iterm2 macos espanso karabiner hammerspoon raycast ssh     # Re-link
+stow --target="$HOME" zsh git iterm2 macos espanso raycast ssh     # Re-link
 ```
 
 ⚠️ **Don't run `./install.sh` while another `brew bundle` is in flight** — the daily `brew upgrade` job in `.zshrc` can collide with it on the same download and you'll get a "process has already locked" error. Wait for the background job to finish (or `pkill -f "brew (bundle|fetch|upgrade)"` if it's stuck) before re-running.

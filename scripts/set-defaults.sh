@@ -344,7 +344,6 @@ EOF
 add_login_item "Bitwarden"  "/Applications/Bitwarden.app"
 add_login_item "Stats"      "/Applications/Stats.app"
 add_login_item "Raycast"    "/Applications/Raycast.app"
-add_login_item "Hammerspoon" "/Applications/Hammerspoon.app"
 
 progress "Configuring Photos and Google Chrome"
 
