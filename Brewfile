@@ -74,8 +74,6 @@ cask "zotero"
 cask "spotify"
 
 # Casks - Communication
-cask "microsoft-office"
-cask "microsoft-teams"
 cask "whatsapp"
 cask "zoom"
 

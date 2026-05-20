@@ -3,6 +3,11 @@ alias edit-zsh="code ~/.zshrc"
 alias claudey='claude --dangerously-skip-permissions'
 alias cl="claude"
 
+# ---- Ngrok -----
+if command -v ngrok &>/dev/null; then
+  eval "$(ngrok completion)"
+fi
+
 # history setup
 HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
