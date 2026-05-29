@@ -4,13 +4,9 @@
 # Updated 2026-03-20 — removed deprecated/dead settings
 
 COMPUTER_NAME="virus"
-STEP=0
-TOTAL=13
 
-progress() {
-  STEP=$((STEP + 1))
-  printf "\n\033[1;34m[%d/%d]\033[0m \033[1m%s\033[0m\n" "$STEP" "$TOTAL" "$1"
-}
+source "$(dirname "${BASH_SOURCE[0]}")/progress.sh"
+PROGRESS_TOTAL=13
 
 # Close any open System Settings panes, to prevent them from overriding
 # settings we’re about to change

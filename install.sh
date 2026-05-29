@@ -1,12 +1,7 @@
 #!/bin/zsh
 
-STEP=0
-TOTAL=8
-
-progress() {
-  STEP=$((STEP + 1))
-  printf "\n\033[1;34m[%d/%d]\033[0m \033[1m%s\033[0m\n" "$STEP" "$TOTAL" "$1"
-}
+source "${0:A:h}/scripts/progress.sh"
+PROGRESS_TOTAL=8
 
 red='\033[0;31m'
 green='\033[0;32m'
