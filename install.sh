@@ -107,8 +107,6 @@ launchctl setenv XDG_CONFIG_HOME "$HOME/.config"
 launchctl setenv XDG_DATA_HOME "$HOME/.local/share"
 launchctl setenv XDG_CACHE_HOME "$HOME/.cache"
 launchctl setenv XDG_STATE_HOME "$HOME/.local/state"
-# Calibre auto-import — watches ~/Downloads + ~/Documents/Digital Editions
-launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.calibre-import.plist" 2>/dev/null || true
 # Daily journal stamp — appends a date header to ~/Documents/journal.md at 6am
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.daily-journal.plist" 2>/dev/null || true
 

@@ -4,6 +4,18 @@ Notable changes to this dotfiles repo, newest first. Format loosely based on
 [Keep a Changelog](https://keepachangelog.com); since there are no semver
 releases, entries are dated.
 
+## 2026-05-29 — Finish dropping calibre-import
+
+The `calibre-import` LaunchAgent was deleted on 2026-05-20, but its caller, script, and docs were left dangling. Completing that removal so nothing points at a file that no longer exists.
+
+### Removed
+
+- `scripts/inbox-to-calibre.sh` — the ebook auto-import script. Its only trigger (the watch agent) was already gone, yet the docstring still claimed it was plist-triggered.
+- `install.sh` `launchctl bootstrap` line for `dotfiles.calibre-import.plist` — bootstrapped a file that hadn't existed since 2026-05-20 (a silent no-op).
+- `README.md` references — the Calibre auto-import bullet, the "Calibre inbox importer" agent mention (now two agents, not three), and `dotfiles.calibre-import.plist` from the install step's bootstrap list.
+
+Calibre and Adobe Digital Editions casks stay in the Brewfile — the app is still installed, just no longer managed by the dotfiles.
+
 ## 2026-05-29 — Unify journal capture
 
 ### Added

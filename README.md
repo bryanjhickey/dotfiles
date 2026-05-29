@@ -58,7 +58,6 @@ I do a lot of reading and note-taking — both for theological study at Ridley a
 
 - **[Espanso](https://espanso.org/)** for text expansion. The dotfiles ship `match/base.yml` (date and time stamps for daily notes — `;date`, `ddate`, `ttime`) and `match/study.yml` (markdown footnote pair, bracketed scripture references, ~20 Bible book abbreviations like `;gen` → `Genesis`, plus a citation skeleton). Anything sensitive (personal email, phone, ABN) lives in a sibling `match/secrets.yml` that's a real local file — not symlinked, not committed, gitignored as belt-and-braces.
 - **`note <text>`**, **`obs <text>`**, **`daily`** — three tiny shell functions in [`zsh/.config/zsh/notes.zsh`](zsh/.config/zsh/notes.zsh). `note` always works (appends a timestamped line to `~/Documents/journal.md`); `obs` targets today's daily note inside `$OBSIDIAN_VAULT`; `daily` opens it in Obsidian via the URL scheme. `note`, the Raycast `journal` command, and the 6am LaunchAgent that drops a date header into `journal.md` all funnel through one script ([`scripts/journal.sh`](scripts/journal.sh)), so the timestamp format and file path live in exactly one place.
-- **Calibre auto-import.** I read a lot of ebooks, and they accumulate from various sources — Adobe Digital Editions drops them in `~/Documents/Digital Editions/`, sometimes I download direct to `~/Downloads`. A LaunchAgent watches both folders; new `.epub`/`.pdf`/`.mobi` files get piped through `calibredb add` into the library and the originals deleted. Skips silently while Calibre is open and re-fires on the next file event.
 - **Obsidian** is installed via the Brewfile but its package is currently a [scaffold/README](obsidian/README.md). I'll wire up the vault when I've decided where it lives — the README documents what's worth tracking (`community-plugins.json`, `hotkeys.json`, snippets, templates) and what to ignore (`workspace.json` and friends rewrite on every focus change — pure diff noise).
 
 ### 🧹 Quiet machine maintenance
@@ -88,7 +87,7 @@ Roughly 60 entries. The interesting categories:
 dotfiles/
 ├── Brewfile             # Homebrew dependencies — single source of truth
 ├── install.sh           # One-shot bootstrap, safe to re-run
-├── scripts/             # set-defaults.sh, set-hostname.sh, time-machine-excludes.sh, inbox-to-calibre.sh
+├── scripts/             # set-defaults.sh, set-hostname.sh, time-machine-excludes.sh, journal.sh
 ├── zsh/        git/        iterm2/      espanso/
 ├── raycast/    macos/      ssh/         obsidian/
 └── CHANGELOG.md
@@ -100,7 +99,7 @@ A few patterns I lean on:
 
 - **Always pass `--target="$HOME"`** to Stow. Its default target is the parent of the current directory (`~/code/`, here), which silently lands symlinks in the wrong place. The bootstrap script always uses the explicit form.
 - **Secrets stay local.** Anything sensitive — personal email, phone, work hostnames, throwaway test passwords — goes in a sibling file outside the symlinked one and gets gitignored. Espanso loads every `*.yml` in `match/`, so `match/base.yml` (committed) and `match/secrets.yml` (local-only) coexist. Same pattern for SSH (`config` + `config.local`).
-- **LaunchAgents over cron.** macOS doesn't have crontab in any meaningful way; launchd is the right tool. Three personal agents live in [`macos/Library/LaunchAgents/`](macos/Library/LaunchAgents/) — XDG env exporter, Calibre inbox importer, daily journal stamper. Adding new ones is a copy-paste of the plist shape.
+- **LaunchAgents over cron.** macOS doesn't have crontab in any meaningful way; launchd is the right tool. Two personal agents live in [`macos/Library/LaunchAgents/`](macos/Library/LaunchAgents/) — XDG env exporter and daily journal stamper. Adding new ones is a copy-paste of the plist shape.
 - **Idempotent vs convergent.** Most steps in `install.sh` are idempotent (no-op if already done). The Brewfile install is *convergent* — it'll upgrade casks when upstream has a newer version, so it does real work on re-run, just nothing destructive.
 
 ## 🛠 What `install.sh` actually does
@@ -110,7 +109,7 @@ Eight steps. Re-runnable.
 1. **Xcode CLT** — `xcode-select --install`. No-op if installed.
 2. **Homebrew + Brewfile** — installs Homebrew if missing, then runs the wrapped `brewfile_install`: pre-flights `brew bundle check --verbose` to enumerate missing items as a clean checklist, runs the install with real-time per-package output, and prints a timed pass/fail summary at the end.
 3. **Stow** — `stow --target="$HOME" zsh git iterm2 macos espanso raycast ssh`.
-4. **LaunchAgents** — bootstraps `dotfiles.xdg-env.plist`, `dotfiles.calibre-import.plist`, `dotfiles.daily-journal.plist` into the user's GUI domain.
+4. **LaunchAgents** — bootstraps `dotfiles.xdg-env.plist` and `dotfiles.daily-journal.plist` into the user's GUI domain.
 5. **Node.js** — latest stable via `asdf`.
 6. **fzf-git** — clones [junegunn/fzf-git.sh](https://github.com/junegunn/fzf-git.sh) into `~/.config/fzf/`.
 7. **bat theme** — downloads Tokyo Night `tmTheme`, rebuilds bat's syntax cache.
