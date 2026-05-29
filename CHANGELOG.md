@@ -4,6 +4,12 @@ Notable changes to this dotfiles repo, newest first. Format loosely based on
 [Keep a Changelog](https://keepachangelog.com); since there are no semver
 releases, entries are dated.
 
+## 2026-05-29 — Derive the LaunchAgent bootstrap list
+
+### Changed
+
+- `install.sh` now loops over `~/Library/LaunchAgents/dotfiles.*.plist` (zsh `(N)` null-glob) instead of bootstrapping each agent by name. A new `dotfiles.*.plist` dropped into the `macos` package is picked up automatically — no hardcoded list to edit. The `mkdir` (anti-folding) and `stow` lines are intentionally left explicit: the stow package list can't be auto-derived (not every top-level dir is a package).
+
 ## 2026-05-29 — Finish dropping calibre-import
 
 The `calibre-import` LaunchAgent was deleted on 2026-05-20, but its caller, script, and docs were left dangling. Completing that removal so nothing points at a file that no longer exists.

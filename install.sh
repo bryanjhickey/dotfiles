@@ -96,14 +96,19 @@ mkdir -p "$HOME/Library/Application Support/espanso/match"
 stow --target="$HOME" zsh git iterm2 macos espanso raycast ssh
 
 progress "Loading personal LaunchAgents"
-# XDG vars for GUI apps (iTerm2, Espanso, …)
-launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.xdg-env.plist" 2>/dev/null || true
+# Bootstrap every personal agent we ship (xdg-env, daily-journal, …). Drop a
+# new dotfiles.*.plist into the macos package and it's picked up here — no edit
+# to this list. (N) is zsh's null-glob qualifier, so it's a no-op if none exist.
+for plist in "$HOME"/Library/LaunchAgents/dotfiles.*.plist(N); do
+  launchctl bootstrap "gui/$(id -u)" "$plist" 2>/dev/null || true
+done
+
+# XDG vars for GUI apps (iTerm2, Espanso, …) — set for the current session;
+# the xdg-env agent above handles future logins.
 launchctl setenv XDG_CONFIG_HOME "$HOME/.config"
 launchctl setenv XDG_DATA_HOME "$HOME/.local/share"
 launchctl setenv XDG_CACHE_HOME "$HOME/.cache"
 launchctl setenv XDG_STATE_HOME "$HOME/.local/state"
-# Daily journal stamp — appends a date header to ~/Documents/journal.md at 6am
-launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/dotfiles.daily-journal.plist" 2>/dev/null || true
 
 progress "Installing Node.js via asdf"
 asdf plugin add nodejs 2>/dev/null || true
