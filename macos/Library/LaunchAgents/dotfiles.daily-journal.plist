@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Stamp ~/Documents/journal.md at 6am every morning so the day has a
-     clean header to write under. Idempotent — appends "(YYYY-MM-DD)"
-     once and exits. Goes through the `note` shell function via zsh so
-     timestamp formatting matches manual entries. -->
+<!-- Append a day header to ~/Documents/journal.md at 6am ("## Friday 29 May
+     2026") so the day has a clean section to write under. Routes through the
+     shared journal module (scripts/journal.sh stamp) — the same code path as
+     manual `note` entries, so formatting stays consistent. -->
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -12,7 +12,7 @@
     <array>
         <string>/bin/zsh</string>
         <string>-c</string>
-        <string>printf "\n## %s\n\n" "$(date '+%A %d %B %Y')" >> "$HOME/Documents/journal.md"</string>
+        <string>"$HOME/code/dotfiles/scripts/journal.sh" stamp</string>
     </array>
     <key>StartCalendarInterval</key>
     <dict>

@@ -15,11 +15,7 @@
 : ${OBSIDIAN_VAULT:=""}
 
 note() {
-  local entry="${*:?usage: note <text>}"
-  local file="${HOME}/Documents/journal.md"
-  mkdir -p "$(dirname "$file")"
-  printf "%s — %s\n" "$(date '+%Y-%m-%d %H:%M')" "$entry" >> "$file"
-  printf "  appended to %s\n" "${file/$HOME/~}"
+  "$HOME/code/dotfiles/scripts/journal.sh" note "$@"
 }
 
 obs() {

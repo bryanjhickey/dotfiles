@@ -4,6 +4,21 @@ Notable changes to this dotfiles repo, newest first. Format loosely based on
 [Keep a Changelog](https://keepachangelog.com); since there are no semver
 releases, entries are dated.
 
+## 2026-05-29 — Unify journal capture
+
+### Added
+
+- **`scripts/journal.sh`** — the single home for plain-text journal capture. Two subcommands: `note <text…>` appends a timestamped line (`YYYY-MM-DD HH:MM — text`), `stamp` appends a day header (`## Friday 29 May 2026`). The path to `~/Documents/journal.md` lives here and nowhere else.
+- **[`CONTEXT.md`](CONTEXT.md)** — domain vocabulary for the repo, starting with the journal-capture terms (Journal, Note, Stamp, journal module) and the Journal-vs-Obsidian distinction.
+
+### Changed
+
+- `note()` in [`zsh/.config/zsh/notes.zsh`](zsh/.config/zsh/notes.zsh), the Raycast `journal` command, and the `dotfiles.daily-journal.plist` LaunchAgent are now thin adapters over `scripts/journal.sh`. Each had reimplemented the append logic, and the plist's comment had drifted — it claimed to route through `note` but inlined its own `printf` with a different format. One module, one format, one place to change. `obs`/`daily` (Obsidian capture) are untouched.
+
+### Removed
+
+- ~14 lines of duplicated journal-append logic across the three callers.
+
 ## 2026-05-08 — Drop Karabiner + Hammerspoon
 
 ### Removed

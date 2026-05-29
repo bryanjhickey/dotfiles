@@ -14,7 +14,4 @@
 # @raycast.description Append a timestamped line to ~/Documents/journal.md
 # @raycast.author Bryan Hickey
 
-JOURNAL="${HOME}/Documents/journal.md"
-mkdir -p "$(dirname "$JOURNAL")"
-printf "%s — %s\n" "$(date '+%Y-%m-%d %H:%M')" "$1" >> "$JOURNAL"
-echo "Appended to ${JOURNAL/$HOME/~}"
+exec "$HOME/code/dotfiles/scripts/journal.sh" note "$1"
