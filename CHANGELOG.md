@@ -47,7 +47,7 @@ Four self-contained phases shipped over an evening, each its own commit.
 ### Removed
 
 - Entire `install/` directory (953-line `macos.sh` plus four pre-Stow bootstrap scripts, all orphaned and unreferenced).
-- `scripts/dark-mode-notify.{swift,plist}`, `scripts/onSwitchDarkMode.sh`, `scripts/{pre,post}-link.sh`, `scripts/links.prop` — broken third-party Swift listener whose plist hardcoded `/Users/andrew/`. Replaced by `hammerspoon/.hammerspoon/darkmode.lua`.
+- `scripts/dark-mode-notify.{swift,plist}`, `scripts/onSwitchDarkMode.sh`, `scripts/{pre,post}-link.sh`, `scripts/links.prop` — broken third-party Swift listener whose plist hardcoded `/Users/bryanjhickey/`. Replaced by `hammerspoon/.hammerspoon/darkmode.lua`.
 - `scripts/macos-hide-menubar.applescript` — unused, never wired anywhere.
 
 ### Fixed
